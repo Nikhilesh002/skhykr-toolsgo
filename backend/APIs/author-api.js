@@ -1,6 +1,11 @@
 // create authorApp mini express app
 const exp=require('express');
 const authorApp=exp.Router();
+const commonApp=require('./common-api');
+const bcryptjs=require('bcryptjs');
+const expressAsyncHandler=require('express-async-handler');
+const jwt=require('jsonwebtoken');
+require('dotenv').config();
 
 
 // user reg route
