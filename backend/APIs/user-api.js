@@ -14,7 +14,7 @@ userApp.use((req,res,next)=>{
   usersCollection=req.app.get('usersCollection');
   articlesCollection=req.app.get('articlesCollection');
   next();
-})
+});
 
 // user reg route
 userApp.post('/register',expressAsyncHandler(async(req,res)=>{
@@ -28,10 +28,10 @@ userApp.post('/register',expressAsyncHandler(async(req,res)=>{
     newUser.password=hashedPwd;
     const dbRes=await usersCollection.insertOne({...newUser});
     if(dbRes.acknowledged===true){
-      res.send({message:'Registration Sussessful'});
+      res.send({message:"Registration Sussessful"});
     }
     else{
-      res.send({message:'Registration Failed'});
+      res.send({message:"Registration Failed"});
     }
   }
 }));
@@ -51,14 +51,27 @@ userApp.post('/login',expressAsyncHandler(async(req,res)=>{
     else{
       // create jwt and send
       const signedToken=jwt.sign({username:dbUser.username},process.env.SECRET_KEY,{expiresIn:40});
-      res.send({message:'Login Success',token:signedToken,user:dbUser});
+      res.send({message:"Login Success",token:signedToken,user:dbUser});
     }
+  }
+}));
+
+// add comments
+userApp.post('/comment',expressAsyncHandler(async(req,res)=>{
+  const commentData=req.body;
+  const dbRes=await articlesCollection.updateOne({articleId:commentData.articleId},{$addToSet:{comments:commentData}});
+  if(dbRes.acknowledged===true){
+    res.send({message:"Comment added Sussessfully"});
+  }
+  else{
+    res.send({message:"Failed to add Comment"});
   }
 }));
 
 // get articles of all users
 userApp.get('/articles',expressAsyncHandler(async(req,res)=>{
-  const articlesList=await articlesCollection.find().toArray();
+  const articlesCollection=req.app.get('articlesCollection');
+  const articlesList=await articlesCollection.find({status:"true"}).toArray();
   res.send({message:"All articles",payload:articlesList});
 }));
 

@@ -7,23 +7,32 @@ const expressAsyncHandler=require('express-async-handler');
 const jwt=require('jsonwebtoken');
 require('dotenv').config();
 
+authorApp.use(exp.json());
+
+let authorsCollection,articlesCollection;
+authorApp.use((req,res,next)=>{
+  authorsCollection=req.app.get('authorsCollection');
+  articlesCollection=req.app.get('articlesCollection');
+  next();
+})
+
 
 // user reg route
-authorApp.post('/registration',expressAsyncHandler(async(req,res)=>{
+authorApp.post('/register',expressAsyncHandler(async(req,res)=>{
   const newUser=req.body;
-  const dbUser=await usersCollection.findOne({username:newUser.username});
+  const dbUser=await authorsCollection.findOne({username:newUser.username});
   if(dbUser!==null){
     res.send({message:"Username already exists"});
   }
   else{
     const hashedPwd=await bcryptjs.hash(newUser.password,6);
     newUser.password=hashedPwd;
-    const dbRes=await usersCollection.insertOne({...newUser});
+    const dbRes=await authorsCollection.insertOne({...newUser});
     if(dbRes.acknowledged===true){
-      res.send({message:'Registration Sussessful'});
+      res.send({message:"Registration Successful"});
     }
     else{
-      res.send({message:'Registration Failed'});
+      res.send({message:"Registration Failed"});
     }
   }
 }));
@@ -31,7 +40,7 @@ authorApp.post('/registration',expressAsyncHandler(async(req,res)=>{
 // user login route
 authorApp.post('/login',expressAsyncHandler(async(req,res)=>{
   const userCred=req.body;
-  const dbUser=await usersCollection.findOne({username:userCred.username});
+  const dbUser=await authorsCollection.findOne({username:userCred.username});
   if(dbUser===null){
     res.send({message:"Invalid Username"});
   }
@@ -43,14 +52,64 @@ authorApp.post('/login',expressAsyncHandler(async(req,res)=>{
     else{
       // create jwt and send
       const signedToken=jwt.sign({username:dbUser.username},process.env.SECRET_KEY,{expiresIn:40});
-      res.send({message:'Login Success',token:signedToken,user:dbUser});
+      res.send({message:"Login Success",token:signedToken,user:dbUser});
     }
   }
 }));
 
+// create article by author
+authorApp.post('/create-article',expressAsyncHandler(async(req,res)=>{
+  const newArticle=req.body;
+  const dbRes=await articlesCollection.insertOne(newArticle);
+  if(dbRes.acknowledged===true){
+    res.send({message:"Article created Successful"});
+  }
+  else{
+    res.send({message:"Article creation Failed"});
+  }
+}));
+
+// update article by articleId
+authorApp.put('/update-article',expressAsyncHandler(async(req,res)=>{
+  const modArticle=req.body;
+  const dbRes=await articlesCollection.updateOne({articleId:modArticle.articleId},{$set:{...modArticle}})
+  if(dbRes.acknowledged===true){
+    res.send({message:"Article updated Successful"});
+  }
+  else{
+    res.send({message:"Update Failed"});
+  }
+}));
+
+// TODO sir told to send article and then update but i didnt like so 'todo'
+// soft delete article by articleId
+authorApp.put('/article/soft-delete/:articleId',expressAsyncHandler(async(req,res)=>{
+  const articleId=req.params.articleId;
+  const dbRes=await articlesCollection.updateOne({articleId:articleId},{$set:{status:"false"}});
+  if(dbRes.acknowledged===true){
+    res.send({message:"Article deleted Sussessfully"});
+  }
+  else{
+    res.send({message:"Article delete Failed"});
+  }
+}));
+
+// undo delete
+authorApp.put('/article/undo-delete/:articleId',expressAsyncHandler(async(req,res)=>{
+  const articleId=req.params.articleId;
+  const dbRes=await articlesCollection.updateOne({articleId:articleId},{$set:{status:"true"}});
+  if(dbRes.acknowledged===true){
+    res.send({message:"Article delete undone Sussessfully"});
+  }
+  else{
+    res.send({message:"Article delete undone Failed"});
+  }
+}));
+
 // get articles of only author
-authorApp.get('/articles',expressAsyncHandler(async(req,res)=>{
-  const articlesList=await articlesCollection.find().toArray();
+authorApp.get('/articles/:authorName',expressAsyncHandler(async(req,res)=>{
+  const authorName=req.params.authorName;
+  const articlesList=await articlesCollection.find({username:authorName,status:"true"}).toArray();
   res.send({message:"All articles",payload:articlesList});
 }));
 

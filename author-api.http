@@ -1,0 +1,62 @@
+### authorApp requests
+### registration
+POST http://localhost:4000/author-api/register
+Content-Type: application/json
+
+{
+  "userType":"author",
+  "username":"Vikram",
+  "password":"Vikram",
+  "mail":"vikram@hotmail.com"
+}
+
+### login
+POST http://localhost:4000/author-api/login
+Content-Type: application/json
+
+{
+  "userType":"author",
+  "username":"Vikram",
+  "password":"Vikram"
+}
+
+### add new article by author
+POST http://localhost:4000/author-api/create-article
+Content-Type: application/json
+
+{
+  "articleId":"{{$timestamp}}",
+  "title":"Basics of cryos",
+  "category":"Fuels",
+  "content":"Cryogenics is the science that addresses the production and effects of very low temperatures. The word originates from the Greek words 'kryos' meaning frost and 'genic' meaning to produce. Under such a definition it could be used to include all temperatures below the freezing point of water (0 C).",
+  "dateOfCreation":"{{$datetime iso8601}}",
+  "dateOfModification":"{{$datetime iso8601}}",
+  "username":"nik",
+  "comments":[],
+  "status":"true"
+}
+
+### update article by author
+PUT http://localhost:4000/author-api/update-article
+Content-Type: application/json
+
+{
+  "articleId":"1709675320",
+  "title":"Basics of cryos",
+  "category":"Fuels",
+  "content":"Theory: Cryogenics is the science that addresses the production and effects of very low temperatures. The word originates from the Greek words 'kryos' meaning frost and 'genic' meaning to produce. Under such a definition it could be used to include all temperatures below the freezing point of water (0 C).",
+  "dateOfCreation":"2024-03-05T20:53:38.710Z",
+  "dateOfModification":"{{$datetime iso8601}}",
+  "username":"nik",
+  "comments":[],
+  "status":"true"
+}
+
+### soft delete article by author
+PUT http://localhost:4000/author-api/article/soft-delete/1709675320
+
+### undo soft delete article by author
+PUT http://localhost:4000/author-api/article/undo-delete/1709675320
+
+### get articles of all author
+GET http://localhost:4000/author-api/articles/nik
