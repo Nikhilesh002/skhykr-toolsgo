@@ -6,6 +6,7 @@ const bcryptjs=require('bcryptjs');
 const expressAsyncHandler=require('express-async-handler');
 const jwt=require('jsonwebtoken');
 require('dotenv').config();
+const verifyToken=require('../middlewares/verifyToken');
 
 userApp.use(exp.json());
 
@@ -28,7 +29,7 @@ userApp.post('/register',expressAsyncHandler(async(req,res)=>{
     newUser.password=hashedPwd;
     const dbRes=await usersCollection.insertOne({...newUser});
     if(dbRes.acknowledged===true){
-      res.send({message:"Registration Sussessful"});
+      res.send({message:"Registration Successful"});
     }
     else{
       res.send({message:"Registration Failed"});
@@ -57,19 +58,20 @@ userApp.post('/login',expressAsyncHandler(async(req,res)=>{
 }));
 
 // add comments
-userApp.post('/comment',expressAsyncHandler(async(req,res)=>{
+userApp.post('/comment:articleId',verifyToken,expressAsyncHandler(async(req,res)=>{
+  const articleId=req.params.articleId;
   const commentData=req.body;
-  const dbRes=await articlesCollection.updateOne({articleId:commentData.articleId},{$addToSet:{comments:commentData}});
+  const dbRes=await articlesCollection.updateOne({articleId:articleId},{$addToSet:{comments:commentData}});
   if(dbRes.acknowledged===true){
-    res.send({message:"Comment added Sussessfully"});
+    res.send({message:"Comment posted"});
   }
   else{
-    res.send({message:"Failed to add Comment"});
+    res.send({message:"Failed to post Comment"});
   }
 }));
 
 // get articles of all users
-userApp.get('/articles',expressAsyncHandler(async(req,res)=>{
+userApp.get('/articles',verifyToken,expressAsyncHandler(async(req,res)=>{
   const articlesCollection=req.app.get('articlesCollection');
   const articlesList=await articlesCollection.find({status:"true"}).toArray();
   res.send({message:"All articles",payload:articlesList});

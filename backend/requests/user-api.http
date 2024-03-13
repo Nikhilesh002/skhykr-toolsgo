@@ -25,11 +25,10 @@ Content-Type: application/json
 GET http://localhost:4000/user-api/articles
 
 ### comments
-POST http://localhost:4000/user-api/comment
+POST http://localhost:4000/user-api/comment:1709675320
 Content-Type: application/json
 
 {
-  "articleId":"1709675320",
   "userName":"nik",
   "comment":"reliable engine"
 }

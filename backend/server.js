@@ -6,6 +6,10 @@ require('dotenv').config();   // adds .env content to process obj, which is a gl
 // import mongodb
 const mongoClient=require('mongodb').MongoClient;
 
+const path=require('path');
+// deploy react build in this server
+app.use(exp.static(path.join(__dirname,'../client/dist')));
+
 
 // connect to db
 mongoClient.connect(process.env.DB_URL)
@@ -39,6 +43,12 @@ app.use('/author-api',authorApp);
 app.use('/admin-api',adminApp);
 
 
+// if we refresh, we get error so add this middleware
+// deals page refreshes
+// checks all above links of middlewares, as they dont match, it searches index.html of client
+app.use((req,res,next)=>{
+  res.sendFile(path.join(__dirname,'../client/dist/index.html'))
+})
 
 
 

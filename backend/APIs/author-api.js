@@ -6,6 +6,7 @@ const bcryptjs=require('bcryptjs');
 const expressAsyncHandler=require('express-async-handler');
 const jwt=require('jsonwebtoken');
 require('dotenv').config();
+const verifyToken=require('../middlewares/verifyToken');
 
 authorApp.use(exp.json());
 
@@ -58,7 +59,7 @@ authorApp.post('/login',expressAsyncHandler(async(req,res)=>{
 }));
 
 // create article by author
-authorApp.post('/create-article',expressAsyncHandler(async(req,res)=>{
+authorApp.post('/create-article',verifyToken,expressAsyncHandler(async(req,res)=>{
   const newArticle=req.body;
   const dbRes=await articlesCollection.insertOne(newArticle);
   if(dbRes.acknowledged===true){
@@ -70,7 +71,7 @@ authorApp.post('/create-article',expressAsyncHandler(async(req,res)=>{
 }));
 
 // update article by articleId
-authorApp.put('/update-article',expressAsyncHandler(async(req,res)=>{
+authorApp.put('/update-article',verifyToken,expressAsyncHandler(async(req,res)=>{
   const modArticle=req.body;
   const dbRes=await articlesCollection.updateOne({articleId:modArticle.articleId},{$set:{...modArticle}})
   if(dbRes.acknowledged===true){
@@ -83,11 +84,11 @@ authorApp.put('/update-article',expressAsyncHandler(async(req,res)=>{
 
 // TODO sir told to send article and then update but i didnt like so 'todo'
 // soft delete article by articleId
-authorApp.put('/article/soft-delete/:articleId',expressAsyncHandler(async(req,res)=>{
+authorApp.put('/article/soft-delete/:articleId',verifyToken,expressAsyncHandler(async(req,res)=>{
   const articleId=req.params.articleId;
   const dbRes=await articlesCollection.updateOne({articleId:articleId},{$set:{status:"false"}});
   if(dbRes.acknowledged===true){
-    res.send({message:"Article deleted Sussessfully"});
+    res.send({message:"Article deleted Successfully"});
   }
   else{
     res.send({message:"Article delete Failed"});
@@ -95,11 +96,11 @@ authorApp.put('/article/soft-delete/:articleId',expressAsyncHandler(async(req,re
 }));
 
 // undo delete
-authorApp.put('/article/undo-delete/:articleId',expressAsyncHandler(async(req,res)=>{
+authorApp.put('/article/undo-delete/:articleId',verifyToken,expressAsyncHandler(async(req,res)=>{
   const articleId=req.params.articleId;
   const dbRes=await articlesCollection.updateOne({articleId:articleId},{$set:{status:"true"}});
   if(dbRes.acknowledged===true){
-    res.send({message:"Article delete undone Sussessfully"});
+    res.send({message:"Article delete undone Successfully"});
   }
   else{
     res.send({message:"Article delete undone Failed"});
@@ -107,7 +108,7 @@ authorApp.put('/article/undo-delete/:articleId',expressAsyncHandler(async(req,re
 }));
 
 // get articles of only author
-authorApp.get('/articles/:authorName',expressAsyncHandler(async(req,res)=>{
+authorApp.get('/articles/:authorName',verifyToken,expressAsyncHandler(async(req,res)=>{
   const authorName=req.params.authorName;
   const articlesList=await articlesCollection.find({username:authorName,status:"true"}).toArray();
   res.send({message:"All articles",payload:articlesList});
