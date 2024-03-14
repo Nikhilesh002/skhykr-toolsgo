@@ -1,14 +1,27 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {useForm} from 'react-hook-form';
 import { Link } from 'react-router-dom';
+import {useDispatch, useSelector} from 'react-redux';
+import { userAuthorLoginThunk } from '../redux/slices/userAuthorSlice';
+import { useNavigate } from 'react-router-dom';
 
 function SignIn() {
 
+  let dispatch=useDispatch();
+  let {loginUserStatus,errorOccured,errMsg}=useSelector(state=>state.userAuthorLoginReducer);
   const {register,handleSubmit}=useForm();
+  let navigate=useNavigate();
 
   async function signin(data){
     console.log(data);
+    dispatch(userAuthorLoginThunk(data));
   }
+
+  useEffect(()=>{
+    if(loginUserStatus===true){
+      navigate('/user-profile');
+    }
+  },[loginUserStatus]);
 
   return (
     <div className="bg-blue-200 py-16">
