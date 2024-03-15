@@ -19,7 +19,7 @@ function AuthorArticles() {
   },[]);
 
   function readArticleById(articleObj){
-    navigate(`../article/${articleObj.articleId}`,{state:articleObj});
+    navigate(`/author-profile/article/${articleObj.articleId}`,{state:articleObj});
   }
 
   return (

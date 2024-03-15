@@ -58,8 +58,8 @@ userApp.post('/login',expressAsyncHandler(async(req,res)=>{
 }));
 
 // add comments
-userApp.post('/comment:articleId',verifyToken,expressAsyncHandler(async(req,res)=>{
-  const articleId=req.params.articleId;
+userApp.post('/comment/:articleId',verifyToken,expressAsyncHandler(async(req,res)=>{
+  const articleId=Number(req.params.articleId);
   const commentData=req.body;
   const dbRes=await articlesCollection.updateOne({articleId:articleId},{$addToSet:{comments:commentData}});
   if(dbRes.acknowledged===true){

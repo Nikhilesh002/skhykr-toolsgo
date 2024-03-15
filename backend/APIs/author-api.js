@@ -73,9 +73,10 @@ authorApp.post('/post-article',verifyToken,expressAsyncHandler(async(req,res)=>{
 // update article by articleId
 authorApp.put('/update-article',verifyToken,expressAsyncHandler(async(req,res)=>{
   const modArticle=req.body;
+  console.log(modArticle);
   const dbRes=await articlesCollection.updateOne({articleId:modArticle.articleId},{$set:{...modArticle}})
   if(dbRes.acknowledged===true){
-    res.send({message:"Article updated Successful"});
+    res.send({message:"Article updated Successfully"});
   }
   else{
     res.send({message:"Update Failed"});
@@ -85,8 +86,9 @@ authorApp.put('/update-article',verifyToken,expressAsyncHandler(async(req,res)=>
 // TODO sir told to send article and then update but i didnt like so 'todo'
 // soft delete article by articleId
 authorApp.put('/article/soft-delete/:articleId',verifyToken,expressAsyncHandler(async(req,res)=>{
-  const articleId=req.params.articleId;
-  const dbRes=await articlesCollection.updateOne({articleId:articleId},{$set:{status:"false"}});
+  const articleId=Number(req.params.articleId);
+  console.log(new Date());
+  const dbRes=await articlesCollection.updateOne({articleId:articleId},{$set:{status:false}});
   if(dbRes.acknowledged===true){
     res.send({message:"Article deleted Successfully"});
   }
@@ -96,21 +98,21 @@ authorApp.put('/article/soft-delete/:articleId',verifyToken,expressAsyncHandler(
 }));
 
 // undo delete
-authorApp.put('/article/undo-delete/:articleId',verifyToken,expressAsyncHandler(async(req,res)=>{
-  const articleId=req.params.articleId;
-  const dbRes=await articlesCollection.updateOne({articleId:articleId},{$set:{status:"true"}});
+authorApp.put('/article/restore/:articleId',verifyToken,expressAsyncHandler(async(req,res)=>{
+  const articleId=Number(req.params.articleId);
+  const dbRes=await articlesCollection.updateOne({articleId:articleId},{$set:{status:true}});
   if(dbRes.acknowledged===true){
-    res.send({message:"Article delete undone Successfully"});
+    res.send({message:"Article restored Successfully"});
   }
   else{
-    res.send({message:"Article delete undone Failed"});
+    res.send({message:"Article restore Failed"});
   }
 }));
 
 // get articles of only author
 authorApp.get('/articles/:authorName',verifyToken,expressAsyncHandler(async(req,res)=>{
   const authorName=req.params.authorName;
-  const articlesList=await articlesCollection.find({username:authorName,status:true}).toArray();
+  const articlesList=await articlesCollection.find({username:authorName}).toArray();
   res.send({message:"All articles",payload:articlesList});
 }));
 
