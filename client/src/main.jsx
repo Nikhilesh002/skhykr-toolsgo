@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{ lazy,Suspense } from 'react';
 import './index.css';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
@@ -8,34 +8,39 @@ import { store } from './redux/store.js';
 import App from './App.jsx';
 import ErrorPage from './pages/ErrorPage.jsx';
 import SignIn from './pages/SignIn.jsx';
-import SignUp from './pages/SignUp.jsx';
-import Article from './pages/Article.jsx';
+//import SignUp from './pages/SignUp.jsx';
+//import Article from './pages/Article.jsx';
+//import AddNewArticle from './pages/AddNewArticle.jsx';
 import AllArticles from './pages/AllArticles.jsx';
-import AddNewArticle from './pages/AddNewArticle.jsx';
 import AuthorProfile from './pages/AuthorProfile.jsx';
 import AuthorArticles from './pages/AuthorArticles.jsx';
 import UserProfile from './pages/UserProfile.jsx';
 import Home from './pages/Home.jsx';
+
+// lazy loading or dynamic import
+const AddNewArticle=lazy(()=>import('./pages/AddNewArticle.jsx'));
+const SignUp=lazy(()=>import('./pages/SignUp.jsx'));
+const Article=lazy(()=>import('./pages/Article.jsx'));
 
 ReactDOM.render(
   <Provider store={store}>
     <BrowserRouter basename=''>
       <Routes>
         <Route path='/' element={<App/>}>
-          <Route index element={<Home/>} />
-          <Route path='signup' element={<SignUp/>} />
+          <Route path='' element={<Home/>} />
+          <Route path='signup' element={<Suspense fallback='Loading...'><SignUp/></Suspense>} />
           <Route path='signin' element={<SignIn/>} />
 
           <Route path='author-profile' element={<AuthorProfile/>}>
             <Route path='' element={<AuthorArticles/>} />
             <Route path='my-articles/:authorName' element={<AuthorArticles/>} />
-            <Route path='write-article' element={<AddNewArticle/>} />
-            <Route path='article/:articleId' element={<Article/>} />
+            <Route path='write-article' element={<Suspense fallback='Loading...'><AddNewArticle/></Suspense>} />
+            <Route path='article/:articleId' element={<Suspense fallback='Loading...'><Article/></Suspense>} />
           </Route>
 
           <Route path='user-profile' element={<UserProfile/>}>
             <Route path='' element={<AllArticles/>} />
-            <Route path='article/:articleId' element={<Article/>} />
+            <Route path='article/:articleId' element={<Suspense fallback='Loading...'><Article/></Suspense>} />
           </Route>
 
           <Route path='adminprofile' element={<AuthorProfile/>}>

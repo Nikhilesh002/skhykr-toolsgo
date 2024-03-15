@@ -24,7 +24,11 @@ function AllArticles() {
 
   return (
     <div className="bg-blue-200 min-h-96">
-      <h1 className='text-center text-xl font-bold font-sans text-teal-500 '>{currentUser.username}'s Articles</h1>
+      {
+        currentUser.userType==="author"?
+        <h1 className='text-center text-xl font-bold font-sans text-teal-500 '>{currentUser.username}'s Articles</h1>
+        :<h1 className='text-center text-xl font-bold font-sans text-teal-500 '>All Articles</h1>
+      }
       <div className='py-3 px-2 grid gap-2 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 '>
         {
           articlesList.map(x=>(

@@ -73,7 +73,6 @@ authorApp.post('/post-article',verifyToken,expressAsyncHandler(async(req,res)=>{
 // update article by articleId
 authorApp.put('/update-article',verifyToken,expressAsyncHandler(async(req,res)=>{
   const modArticle=req.body;
-  console.log(modArticle);
   const dbRes=await articlesCollection.updateOne({articleId:modArticle.articleId},{$set:{...modArticle}})
   if(dbRes.acknowledged===true){
     res.send({message:"Article updated Successfully"});
@@ -87,7 +86,6 @@ authorApp.put('/update-article',verifyToken,expressAsyncHandler(async(req,res)=>
 // soft delete article by articleId
 authorApp.put('/article/soft-delete/:articleId',verifyToken,expressAsyncHandler(async(req,res)=>{
   const articleId=Number(req.params.articleId);
-  console.log(new Date());
   const dbRes=await articlesCollection.updateOne({articleId:articleId},{$set:{status:false}});
   if(dbRes.acknowledged===true){
     res.send({message:"Article deleted Successfully"});

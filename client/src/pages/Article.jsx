@@ -107,6 +107,7 @@ function Article() {
               <div className="py-3">
                 {
                   currentUser.userType==="user" && (
+                    // TODO clear input tag after submission so use rest in 2 diff useForm
                     <form onSubmit={handleSubmit(addComment)}>
                       <input type="text" className='w-96 sm:w-5/6 md:w-4/6 lg:w-3/6 xl:w-2/6 py-1 ps-2 pe-1 text-md border-2 border-black rounded ' placeholder='Add a comment...'
                         {...register("comment",{required:true})}/>

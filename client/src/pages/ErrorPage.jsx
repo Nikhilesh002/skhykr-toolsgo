@@ -1,8 +1,16 @@
-import React from 'react'
+import React from 'react';
+import {useRouteError} from 'react-router-dom';
 
 function ErrorPage() {
+
+  // let routingError=useRouteError();
+  // console.log(routingError);
+  // {routingError.status}-{routingError.data}
+
   return (
-    <div className='text-4xl text-center my-64'>404 Error</div>
+    <div className=' mt-10 text-center'>
+      <h1 className='text-red-500 text-5xl'>404 Error</h1>
+    </div>
   )
 }
 
