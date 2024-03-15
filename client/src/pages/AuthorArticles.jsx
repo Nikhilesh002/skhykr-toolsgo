@@ -4,13 +4,13 @@ import axios from 'axios';
 import {axiosWithToken} from '../axioswithtoken/axiosWithToken';
 import { useNavigate,Outlet,redirect } from 'react-router-dom';
 
-function AllArticles() {
+function AuthorArticles() {
   let [articlesList,setArticlesList]=useState([]);
   let navigate=useNavigate();
   let {currentUser}=useSelector(state=>state.userAuthorLoginReducer);
 
   async function getArticles(){
-    const res=await axiosWithToken.get('http://localhost:4000/user-api/articles');
+    const res=await axiosWithToken.get(`http://localhost:4000/author-api/articles/${currentUser.username}`);
     setArticlesList(res.data.payload);
   }
 
@@ -19,7 +19,7 @@ function AllArticles() {
   },[]);
 
   function readArticleById(articleObj){
-    navigate(`article/${articleObj.articleId}`,{state:articleObj});
+    navigate(`../article/${articleObj.articleId}`,{state:articleObj});
   }
 
   return (
@@ -47,4 +47,4 @@ function AllArticles() {
   )
 }
 
-export default AllArticles;
+export default AuthorArticles;

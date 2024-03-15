@@ -13,6 +13,7 @@ import Article from './pages/Article.jsx';
 import AllArticles from './pages/AllArticles.jsx';
 import AddNewArticle from './pages/AddNewArticle.jsx';
 import AuthorProfile from './pages/AuthorProfile.jsx';
+import AuthorArticles from './pages/AuthorArticles.jsx';
 import UserProfile from './pages/UserProfile.jsx';
 import Home from './pages/Home.jsx';
 
@@ -24,16 +25,19 @@ ReactDOM.render(
           <Route index element={<Home/>} />
           <Route path='signup' element={<SignUp/>} />
           <Route path='signin' element={<SignIn/>} />
+
           <Route path='author-profile' element={<AuthorProfile/>}>
-            <Route path='writearticle' element={<AddNewArticle/>} />
-            <Route path='allarticles' element={<AllArticles/>} />
-            <Route path='article' element={<Article/>} />
+            <Route path='' element={<AuthorArticles/>} />
+            <Route path='my-articles/:authorName' element={<AuthorArticles/>} />
+            <Route path='write-article' element={<AddNewArticle/>} />
+            <Route path='article/:articleId' element={<Article/>} />
           </Route>
+
           <Route path='user-profile' element={<UserProfile/>}>
-            <Route path='user-comments' element={<ErrorPage/>} />
-            <Route path='allarticles' element={<AllArticles/>} />
-            <Route path='article' element={<Article/>} />
+            <Route path='' element={<AllArticles/>} />
+            <Route path='article/:articleId' element={<Article/>} />
           </Route>
+
           <Route path='adminprofile' element={<AuthorProfile/>}>
             <Route path='userslist' element={<ErrorPage/>} />
             <Route path='authorslist' element={<ErrorPage/>} />

@@ -12,7 +12,7 @@ function SignUp() {
 
   async function signup(data){
     // http post req
-    let res=await axios.post('http://localhost:4000/user-api/register',data);
+    let res=await axios.post(`http://localhost:4000/${data.userType}-api/register`,data);
     //console.log(res);
     if(res.data.message==="Registration Successful"){
       navigate('/signin');
@@ -50,13 +50,12 @@ function SignUp() {
             <input className='border-black border-2 rounded-md px-2 py-1 text-center text-lg'
               type="text" name="username" id="username" placeholder='Username'
               {...register("username",{required:true,maxLength:20})}/>
-
             <input className='border-black border-2 rounded-md px-2 py-1 text-center text-lg'
               type="text" name="password" id="password" placeholder='Password'
               {...register("password",{required:true,maxLength:15})}/>
           </div>
 
-          <button type='submit' className='shadow-sm bg-green-400 hover:bg-green-500 hover:border-2 rounded-lg px-2 py-1 block m-auto mt-4'>Sign-Up</button>
+          <button type='submit' className='shadow-sm bg-green-400 hover:bg-green-500 rounded-lg px-2 py-1 block m-auto mt-4'>Sign-Up</button>
 
         </form>
         <Link to='/signin'><p className='text-blue-500 hover:underline text-right pe-5'>Existing User? Sign-In here</p></Link>

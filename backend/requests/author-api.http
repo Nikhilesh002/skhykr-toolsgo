@@ -16,12 +16,12 @@ Content-Type: application/json
 
 {
   "userType":"author",
-  "username":"Vikram",
-  "password":"Vikram"
+  "username":"Rakesh",
+  "password":"Rakesh"
 }
 
 ### add new article by author
-POST http://localhost:4000/author-api/create-article
+POST http://localhost:4000/author-api/post-article
 Content-Type: application/json
 
 {

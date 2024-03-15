@@ -8,18 +8,17 @@ import { useNavigate } from 'react-router-dom';
 function SignIn() {
 
   let dispatch=useDispatch();
-  let {loginUserStatus,errorOccured,errMsg}=useSelector(state=>state.userAuthorLoginReducer);
+  let {loginUserStatus,currentUser,errorOccured,errMsg}=useSelector(state=>state.userAuthorLoginReducer);
   const {register,handleSubmit}=useForm();
   let navigate=useNavigate();
 
   async function signin(data){
-    console.log(data);
     dispatch(userAuthorLoginThunk(data));
   }
 
   useEffect(()=>{
     if(loginUserStatus===true){
-      navigate('/user-profile');
+      navigate(`/${currentUser.userType}-profile`);
     }
   },[loginUserStatus]);
 

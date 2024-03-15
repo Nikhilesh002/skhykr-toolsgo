@@ -51,7 +51,7 @@ userApp.post('/login',expressAsyncHandler(async(req,res)=>{
     }
     else{
       // create jwt and send
-      const signedToken=jwt.sign({username:dbUser.username},process.env.SECRET_KEY,{expiresIn:40});
+      const signedToken=jwt.sign({username:dbUser.username},process.env.SECRET_KEY,{expiresIn:'1d'});
       res.send({message:"Login Success",token:signedToken,user:dbUser});
     }
   }
@@ -73,7 +73,7 @@ userApp.post('/comment:articleId',verifyToken,expressAsyncHandler(async(req,res)
 // get articles of all users
 userApp.get('/articles',verifyToken,expressAsyncHandler(async(req,res)=>{
   const articlesCollection=req.app.get('articlesCollection');
-  const articlesList=await articlesCollection.find({status:"true"}).toArray();
+  const articlesList=await articlesCollection.find({status:true}).toArray();
   res.send({message:"All articles",payload:articlesList});
 }));
 

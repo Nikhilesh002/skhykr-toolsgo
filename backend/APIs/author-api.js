@@ -18,7 +18,7 @@ authorApp.use((req,res,next)=>{
 })
 
 
-// user reg route
+// author reg route
 authorApp.post('/register',expressAsyncHandler(async(req,res)=>{
   const newUser=req.body;
   const dbUser=await authorsCollection.findOne({username:newUser.username});
@@ -38,7 +38,7 @@ authorApp.post('/register',expressAsyncHandler(async(req,res)=>{
   }
 }));
 
-// user login route
+// author login route
 authorApp.post('/login',expressAsyncHandler(async(req,res)=>{
   const userCred=req.body;
   const dbUser=await authorsCollection.findOne({username:userCred.username});
@@ -52,18 +52,18 @@ authorApp.post('/login',expressAsyncHandler(async(req,res)=>{
     }
     else{
       // create jwt and send
-      const signedToken=jwt.sign({username:dbUser.username},process.env.SECRET_KEY,{expiresIn:40});
+      const signedToken=jwt.sign({username:dbUser.username},process.env.SECRET_KEY,{expiresIn:'1d'});
       res.send({message:"Login Success",token:signedToken,user:dbUser});
     }
   }
 }));
 
-// create article by author
-authorApp.post('/create-article',verifyToken,expressAsyncHandler(async(req,res)=>{
+// post article by author
+authorApp.post('/post-article',verifyToken,expressAsyncHandler(async(req,res)=>{
   const newArticle=req.body;
   const dbRes=await articlesCollection.insertOne(newArticle);
   if(dbRes.acknowledged===true){
-    res.send({message:"Article created Successful"});
+    res.send({message:"Article created Successfully"});
   }
   else{
     res.send({message:"Article creation Failed"});
@@ -110,7 +110,7 @@ authorApp.put('/article/undo-delete/:articleId',verifyToken,expressAsyncHandler(
 // get articles of only author
 authorApp.get('/articles/:authorName',verifyToken,expressAsyncHandler(async(req,res)=>{
   const authorName=req.params.authorName;
-  const articlesList=await articlesCollection.find({username:authorName,status:"true"}).toArray();
+  const articlesList=await articlesCollection.find({username:authorName,status:true}).toArray();
   res.send({message:"All articles",payload:articlesList});
 }));
 
