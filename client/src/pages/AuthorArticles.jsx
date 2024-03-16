@@ -10,7 +10,7 @@ function AuthorArticles() {
   let {currentUser}=useSelector(state=>state.userAuthorLoginReducer);
 
   async function getArticles(){
-    const res=await axiosWithToken.get(`http://localhost:4000/author-api/articles/${currentUser.username}`);
+    const res=await axiosWithToken.get(`${window.location.origin}/author-api/articles/${currentUser.username}`);
     setArticlesList(res.data.payload);
   }
 

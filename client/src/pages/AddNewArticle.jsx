@@ -27,7 +27,7 @@ function AddNewArticle() {
     article.status = true;
     console.log(article);
     // http post
-    const res=await axiosWithToken.post('http://localhost:4000/author-api/post-article',article);
+    const res=await axiosWithToken.post(`${window.location.origin}/author-api/post-article`,article);
     console.log(res);
     if(res.data.message==="Article created Successfully"){
       navigate(`/author-profile/my-articles/${currentUser.username}`);

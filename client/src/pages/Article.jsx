@@ -30,7 +30,7 @@ function Article() {
     // remove id as in mongoDB, its Object("id") but in client, its a string of digits
     // so dont send, send remaining, which replaces existing
     delete modifiedArticle._id;
-    let res=await axiosWithToken.put('http://localhost:4000/author-api/update-article',modifiedArticle);
+    let res=await axiosWithToken.put(`${window.location.origin}/author-api/update-article`,modifiedArticle);
     if(res.data.message==="Article updated Successfully"){
       setArticleEditStatus(false);
       navigate(`/author-profile/article/${modifiedArticle.articleId}`,{state:modifiedArticle});
@@ -38,14 +38,14 @@ function Article() {
   }
 
   async function deleteArticle(){
-    let res=await axiosWithToken.put(`http://localhost:4000/author-api/article/soft-delete/${currentArticle.articleId}`);
+    let res=await axiosWithToken.put(`${window.location.origin}/author-api/article/soft-delete/${currentArticle.articleId}`);
     if(res.data.message==="Article deleted Successfully"){
       setCurrentArticle({...currentArticle,status:false});
     }
   }
 
   async function restoreArticle(){
-    let res=await axiosWithToken.put(`http://localhost:4000/author-api/article/restore/${currentArticle.articleId}`);
+    let res=await axiosWithToken.put(`${window.location.origin}/author-api/article/restore/${currentArticle.articleId}`);
     if(res.data.message==="Article restored Successfully"){
       setCurrentArticle({...currentArticle,status:true});
     }
@@ -53,7 +53,7 @@ function Article() {
 
   async function addComment(commentObj){
     commentObj.username=currentUser.username;
-    let res=await axiosWithToken.post(`http://localhost:4000/user-api/comment/${currentArticle.articleId}`,commentObj);
+    let res=await axiosWithToken.post(`${window.location.origin}/user-api/comment/${currentArticle.articleId}`,commentObj);
     if(res.data.message==="Comment posted"){
       // TODO only 1 latest comment is appeared, change so all are visible
       setComment(commentObj);

@@ -1,6 +1,5 @@
 import React,{useState,useEffect} from 'react';
 import { useSelector } from 'react-redux';
-import axios from 'axios';
 import {axiosWithToken} from '../axioswithtoken/axiosWithToken';
 import { useNavigate,Outlet,redirect } from 'react-router-dom';
 
@@ -19,7 +18,7 @@ function AllArticles() {
   },[]);
 
   function readArticleById(articleObj){
-    navigate(`article/${articleObj.articleId}`,{state:articleObj});
+    navigate(`/${currentUser.userType}-profile/article/${articleObj.articleId}`,{state:articleObj});
   }
 
   return (
