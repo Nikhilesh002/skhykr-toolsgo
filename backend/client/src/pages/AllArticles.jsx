@@ -26,7 +26,6 @@ function AllArticles() {
     let date = new Date(iso).getUTCDate();
     let month = new Date(iso).getUTCMonth()+1; // months are 0 based
     let year = new Date(iso).getUTCFullYear();
-    console.log(`${date}/${month}/${year}`);
     return `${date}/${month}/${year}`;
   }
 
