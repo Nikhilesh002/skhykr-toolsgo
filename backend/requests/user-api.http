@@ -6,9 +6,9 @@ Content-Type: application/json
 
 {
   "userType":"user",
-  "username":"kalpana",
-  "password":"password",
-  "mail":"kalpana@hotmail.com"
+  "username":"anni",
+  "password":"anni",
+  "phno":"12345678"
 }
 
 ### login
@@ -17,18 +17,6 @@ Content-Type: application/json
 
 {
   "userType":"user",
-  "username":"kalpana",
-  "password":"password"
-}
-
-### get articles of all users
-GET http://localhost:4000/user-api/articles
-
-### comments
-POST http://localhost:4000/user-api/comment:1709675320
-Content-Type: application/json
-
-{
-  "userName":"nik",
-  "comment":"reliable engine"
+  "username":"Arun",
+  "password":"Arun"
 }

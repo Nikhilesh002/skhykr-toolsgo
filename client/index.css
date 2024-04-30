@@ -1,0 +1,5 @@
+.bgImg{
+  background-image: url('../pics/tools1.jpg');
+  background-size: cover;
+  min-height: 100vh;
+}

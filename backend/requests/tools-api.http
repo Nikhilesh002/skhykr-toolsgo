@@ -1,0 +1,31 @@
+### registration
+POST http://localhost:4000/tools-api/register
+Content-Type: application/json
+
+{
+  "toolid":"9879",
+  "ownername":"somu",
+  "toolname":"Harvester",
+  "cost":"20516",
+  "location":"Meerpet"
+}
+
+
+### get tools of all users
+GET http://localhost:4000/tools-api/tools
+
+
+### registration
+POST http://localhost:4000/tools-api/update
+Content-Type: application/json
+
+{
+  "toolid":"3684",
+  "ownername":"nikki",
+  "toolname":"Plough",
+  "cost":"5468",
+  "location":"Hyderabad",
+}
+
+### delete tool
+DELETE http://localhost:4000/tools-api/delete-id/9879
